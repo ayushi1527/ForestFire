@@ -10,8 +10,8 @@ export const connectMQTT = (onMessage) => {
   client.on("connect", () => {
     console.log("MQTT connected");
     // Subscribe to your topics
-    client.subscribe("forest/zone1");
-    client.subscribe("forest/zone2");
+    client.subscribe("fire/node1");
+    client.subscribe("fire/node2");
   });
 
   client.on("message", (topic, message) => {

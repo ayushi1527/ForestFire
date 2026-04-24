@@ -42,7 +42,7 @@ export default function ZoneCard({ zone, data, type, onCardClick }) {
       <div className="grid md:grid-cols-3 gap-6">
         <MetricCard
           title="Temperature"
-          value={`${data.temp}°C` ?? "--"}
+          value={data?.temp ? `${data.temp}°C` : "--"}
           icon={<Thermometer />}
           zone={`Zone ${zone}`}
           onClick={onCardClick}
@@ -50,7 +50,7 @@ export default function ZoneCard({ zone, data, type, onCardClick }) {
 
         <MetricCard
           title="Humidity"
-          value={`${data.humidity}%` ?? "--"}
+          value={data?.humidity ? `${data.humidity}%` : "--"}
           icon={<Droplets />}
           zone={`Zone ${zone}`}
           onClick={onCardClick}
@@ -58,7 +58,7 @@ export default function ZoneCard({ zone, data, type, onCardClick }) {
 
         <MetricCard
           title="Flame"
-          value={data.flame ? "YES" : "NO"}
+          value={data?.flame ? "YES" : "NO"}
           icon={<Flame />}
           zone={`Zone ${zone}`}
           onClick={onCardClick}
@@ -66,7 +66,7 @@ export default function ZoneCard({ zone, data, type, onCardClick }) {
 
         <MetricCard
           title="Smoke"
-          value={data.smoke ?? "--"}
+          value={data?.smoke ? data.smoke : "--"}
           icon={<Wind />}
           zone={`Zone ${zone}`}
           onClick={onCardClick}
@@ -75,7 +75,7 @@ export default function ZoneCard({ zone, data, type, onCardClick }) {
         {type === "zone2" && (
           <MetricCard
             title="Soil Moisture"
-            value={`${data.soil}%` ?? "--"}
+            value={data?.soil ? `${data.soil}%` : "--"}
             icon={<Leaf />}
             zone={`Zone ${zone}`}
             onClick={onCardClick}
@@ -84,10 +84,9 @@ export default function ZoneCard({ zone, data, type, onCardClick }) {
 
         <MetricCard
           title="GPS"
-          value={`${data.lat}, ${data.lon}` ?? "--"}
+          value={data?.lat && data?.lon ? `${data.lat}, ${data.lon}` : "--"}
           icon={<MapPin />}
           zone={`Zone ${zone}`}
-          onClick={onCardClick}
         />
       </div>
     </div>

@@ -10,8 +10,10 @@ smart-fire-system/
 │   │   ├── Navbar.jsx
 │   │   ├── MetricCard.jsx
 │   │   ├── ZoneCard.jsx
-│   │   ├── AlertBanner.jsx
-│   │   ├── Loader.jsx
+│   │   ├── AlertPopup.jsx
+│   │   ├── HeatMapView.jsx
+│   │   ├── AlertHistory.jsx
+│   │   ├── GraphPopup.jsx
 │   │
 │   ├── pages/                 # Main pages
 │   │   ├── Home.jsx

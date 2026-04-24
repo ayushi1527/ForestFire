@@ -7,40 +7,55 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-euseEffect(() => {
-  const client = connectMQTT((topic, data) => {
-    // expected data shape from ESP32:
-    // { temp, humidity, smoke, soil?, flame, lat, lon }
+export default function GraphPopup({ history, metric, zone, onClose }) {
+  if (!history || !metric || !zone) return null;
 
-    const point = {
-      time: new Date().toLocaleTimeString(),
-      temp: Number(data.temp),
-      humidity: Number(data.humidity),
-      smoke: Number(data.smoke),
-      soil: data.soil ? Number(data.soil) : null,
-      flame: data.flame ? 1 : 0,
-      lat: data.lat,
-      lon: data.lon,
-    };
+  // 🧠 Select correct zone data
+  const data = zone === "Zone 1" ? history.z1 : history.z2;
 
-    if (topic === "forest/zone1") {
-      setZone1(point); // your existing live card state
+  // 🎯 Map metric → key
+  const keyMap = {
+    Temperature: "temp",
+    Humidity: "humidity",
+    Smoke: "smoke",
+    "Soil Moisture": "soil",
+    Flame: "flame",
+  };
 
-      setHistory(prev => ({
-        ...prev,
-        z1: [...prev.z1, point].slice(-MAX_POINTS),
-      }));
-    }
+  const dataKey = keyMap[metric];
 
-    if (topic === "forest/zone2") {
-      setZone2(point);
+  return (
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+      <div className="bg-white p-6 rounded-2xl w-[90%] max-w-3xl shadow-xl">
 
-      setHistory(prev => ({
-        ...prev,
-        z2: [...prev.z2, point].slice(-MAX_POINTS),
-      }));
-    }
-  });
+        {/* HEADER */}
+        <div className="flex justify-between mb-4">
+          <h2 className="text-xl font-semibold">
+            {metric} - {zone}
+          </h2>
 
-  return () => client.end();
-}, []);
+          <button onClick={onClose} className="text-red-500 text-lg">
+            ✕
+          </button>
+        </div>
+
+        {/* GRAPH */}
+        <ResponsiveContainer width="100%" height={300}>
+          <LineChart data={data}>
+            <XAxis dataKey="time" />
+            <YAxis />
+            <Tooltip />
+
+            <Line
+              type={metric === "Flame" ? "stepAfter" : "monotone"}
+              dataKey={dataKey}
+              stroke="#f97316"
+              strokeWidth={3}
+            />
+          </LineChart>
+        </ResponsiveContainer>
+
+      </div>
+    </div>
+  );
+}
